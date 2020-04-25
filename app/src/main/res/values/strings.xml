@@ -3,4 +3,5 @@
     <string name="api_url">https://mashape-community-urban-dictionary.p.rapidapi.com</string>
     <string name="thumbs_down">down</string>
     <string name="thumbs_up" >up</string>
+    <string name="search_by_tag">search by tag...</string>
 </resources>

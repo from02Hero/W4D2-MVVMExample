@@ -2,8 +2,10 @@ package com.example.w4d2_mvvm_example.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.w4d2_mvvm_example.R
+import com.example.w4d2_mvvm_example.databinding.WordItemBinding
 import com.example.w4d2_mvvm_example.model.response.Word
 
 class WordsAdapter : RecyclerView.Adapter<WordViewHolder>() {
@@ -22,12 +24,9 @@ class WordsAdapter : RecyclerView.Adapter<WordViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder =
-        WordViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.word_item,
-                parent,
-                false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
+        val binding: WordItemBinding = DataBindingUtil.inflate(LayoutInflater.
+            from(parent.context), R.layout.word_item, parent, false)
+        return WordViewHolder(binding)
+    }
 }

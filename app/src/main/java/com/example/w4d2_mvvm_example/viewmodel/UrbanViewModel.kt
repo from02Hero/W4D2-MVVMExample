@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.w4d2_mvvm_example.model.network.UrbanRepository
 import com.example.w4d2_mvvm_example.model.response.Word
+import com.example.w4d2_mvvm_example.view.WordsAdapter
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView
 import io.reactivex.disposables.CompositeDisposable
 import rx.Notification
@@ -19,6 +20,8 @@ class UrbanViewModel constructor(private val urbanRepository: UrbanRepository) :
         get() = stateMutableLiveData
     var loaded = false
 
+    val wordsAdapter = WordsAdapter()
+
     private fun getDefinitions(term: String) {
         stateMutableLiveData.value = AppState.LOADING
         disposable.add(
@@ -28,6 +31,7 @@ class UrbanViewModel constructor(private val urbanRepository: UrbanRepository) :
                     if (it.list.isEmpty()) {
                         stateMutableLiveData.value = AppState.ERROR("No Definitions Retrieved")
                     } else {
+                        wordsAdapter.update(it.list)
                         stateMutableLiveData.value = AppState.SUCCESS(it.list)
                     }
                 }, {

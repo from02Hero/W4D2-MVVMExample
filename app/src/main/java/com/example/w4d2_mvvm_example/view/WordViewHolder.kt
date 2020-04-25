@@ -1,15 +1,15 @@
 package com.example.w4d2_mvvm_example.view
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.w4d2_mvvm_example.databinding.WordItemBinding
 import com.example.w4d2_mvvm_example.model.response.Word
-import kotlinx.android.synthetic.main.word_item.view.*
+import com.example.w4d2_mvvm_example.viewmodel.WordViewModel
 
-class WordViewHolder(item: View) : RecyclerView.ViewHolder(item) {
+class WordViewHolder(private val binding: WordItemBinding) :  RecyclerView.ViewHolder(binding.root) {
+    private val wordViewModel = WordViewModel()
+
     fun bindItem(word: Word) {
-        //populate text
-        itemView.definition.text = word.definition
-        itemView.uptxt.text = word.thumbs_up.toString()
-        itemView.downtxt.text = word.thumbs_down.toString()
+        wordViewModel.bind(word)
+        binding.viewModel = wordViewModel
     }
 }
