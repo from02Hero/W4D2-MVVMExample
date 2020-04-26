@@ -5,6 +5,7 @@ import android.widget.TextView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,13 +18,21 @@ fun setAdapter(view: RecyclerView, adapter: RecyclerView.Adapter<*>) {
     view.addItemDecoration(itemDecoration)
 }
 
-@BindingAdapter("mutableVisibility")
-fun setMutableVisibility(view: View,  visibility: MutableLiveData<Int>?) {
+@BindingAdapter("inmutableVisibility")
+fun setVisibility(view: View,  visibility: LiveData<Int>?) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
     if (parentActivity != null && visibility != null) {
         visibility.observe(parentActivity, Observer {
                 value -> view.visibility = value?:View.VISIBLE
         })
+    }
+}
+
+@BindingAdapter("text")
+fun setText(view: TextView,  text: LiveData<String>?) {
+    val parentActivity:AppCompatActivity? = view.getParentActivity()
+    if (parentActivity != null && text != null) {
+        text.observe(parentActivity, Observer { value -> view.text = value?:""})
     }
 }
 

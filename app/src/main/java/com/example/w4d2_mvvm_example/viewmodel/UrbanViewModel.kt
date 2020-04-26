@@ -1,11 +1,11 @@
 package com.example.w4d2_mvvm_example.viewmodel
 
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.w4d2_mvvm_example.model.network.UrbanRepository
-import com.example.w4d2_mvvm_example.model.response.Word
 import com.example.w4d2_mvvm_example.view.WordsAdapter
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView
 import io.reactivex.disposables.CompositeDisposable
@@ -13,26 +13,40 @@ import rx.Notification
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 
-class UrbanViewModel constructor(private val urbanRepository: UrbanRepository) : ViewModel() {
+class UrbanViewModel(
+    private val urbanRepository: UrbanRepository) : ViewModel() {
+
     private val disposable = CompositeDisposable()
-    private val stateMutableLiveData = MutableLiveData<AppState>()
-    val stateLiveData: LiveData<AppState>
-        get() = stateMutableLiveData
-    var loaded = false
+
+    private val progressBarVisibilityMutableLiveData = MutableLiveData<Int>()
+    val progressBarVisibilityLiveData: LiveData<Int>
+        get() = progressBarVisibilityMutableLiveData
+    private val listVisibilityMutableLiveData = MutableLiveData<Int>()
+    val listVisibilityLiveData: LiveData<Int>
+        get() = listVisibilityMutableLiveData
+    private val errorVisibilityMutableLiveData = MutableLiveData<Int>()
+    val errorVisibilityLiveData: LiveData<Int>
+        get() = errorVisibilityMutableLiveData
+    private val errorMessageMutableLiveData = MutableLiveData<String>()
+    val errorMessagLiveData: LiveData<String>
+        get() = errorMessageMutableLiveData
+
+    private var loaded = false
 
     val wordsAdapter = WordsAdapter()
 
     private fun getDefinitions(term: String) {
-        stateMutableLiveData.value = AppState.LOADING
+        displayLoading()
         disposable.add(
-            urbanRepository.getDefinitionList(term)
+            urbanRepository
+                .getDefinitionList(term)
                 .subscribe({
                     loaded = true
-                    if (it.list.isEmpty()) {
-                        stateMutableLiveData.value = AppState.ERROR("No Definitions Retrieved")
+                    if (it.isEmpty()) {
+                        displayMessage("No Definitions Retrieved")
                     } else {
-                        wordsAdapter.update(it.list)
-                        stateMutableLiveData.value = AppState.SUCCESS(it.list)
+                        wordsAdapter.update(it)
+                        displayWords()
                     }
                 }, {
                     loaded = true
@@ -41,9 +55,36 @@ class UrbanViewModel constructor(private val urbanRepository: UrbanRepository) :
                         is UnknownHostException -> "No Internet Connection"
                         else -> it.localizedMessage
                     }
-                    stateMutableLiveData.value = AppState.ERROR(errorString)
+                    displayMessage(errorString)
                 })
         )
+    }
+
+    fun initialState() {
+        progressBarVisibilityMutableLiveData.value = View.GONE
+        errorVisibilityMutableLiveData.value = View.GONE
+    }
+
+    private fun displayWords() {
+        // set correct visible element
+        listVisibilityMutableLiveData.value = View.VISIBLE
+        initialState()
+    }
+
+    private fun displayLoading() {
+        // set correct visible element
+        progressBarVisibilityMutableLiveData.value = View.VISIBLE
+        listVisibilityMutableLiveData.value = View.GONE
+        errorVisibilityMutableLiveData.value = View.GONE
+    }
+
+    private fun displayMessage(message: String) {
+        // set correct visible element
+        progressBarVisibilityMutableLiveData.value = View.GONE
+        listVisibilityMutableLiveData.value = View.GONE
+        errorVisibilityMutableLiveData.value = View.VISIBLE
+        //set message
+        errorMessageMutableLiveData.value = message
     }
 
     fun searchDefinitions(searchView: SearchView) {
@@ -65,11 +106,5 @@ class UrbanViewModel constructor(private val urbanRepository: UrbanRepository) :
     override fun onCleared() {
         super.onCleared()
         disposable.clear()
-    }
-
-    sealed class AppState {
-        object LOADING : AppState()
-        data class SUCCESS(val wordsList: MutableList<Word>) : AppState()
-        data class ERROR(val message: String) : AppState()
     }
 }
