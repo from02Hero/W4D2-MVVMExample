@@ -21,6 +21,7 @@ class UrbanViewModel(
     private val progressBarVisibilityMutableLiveData = MutableLiveData<Int>()
     val progressBarVisibilityLiveData: LiveData<Int>
         get() = progressBarVisibilityMutableLiveData
+
     private val listVisibilityMutableLiveData = MutableLiveData<Int>()
     val listVisibilityLiveData: LiveData<Int>
         get() = listVisibilityMutableLiveData
