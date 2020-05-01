@@ -17,8 +17,4 @@ data class Word(@PrimaryKey(autoGenerate = true)
                 val thumbs_up: Int,
                 @ColumnInfo(name = "thumbs_down")
                 val thumbs_down: Int
-//                ,
-//                @ColumnInfo(name = "expire")
-//                @TypeConverters(TimestampConverter::class)
-//                var expire: Date
 )

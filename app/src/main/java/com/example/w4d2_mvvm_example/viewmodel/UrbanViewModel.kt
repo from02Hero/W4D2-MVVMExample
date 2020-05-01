@@ -5,16 +5,16 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.w4d2_mvvm_example.model.network.UrbanRepository
+import com.example.w4d2_mvvm_example.model.network.UrbanRepositoryDagger
 import com.example.w4d2_mvvm_example.view.WordsAdapter
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView
 import io.reactivex.disposables.CompositeDisposable
 import rx.Notification
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class UrbanViewModel(
-    private val urbanRepository: UrbanRepository) : ViewModel() {
+class UrbanViewModel@Inject constructor(private val urbanRepository: UrbanRepositoryDagger) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
