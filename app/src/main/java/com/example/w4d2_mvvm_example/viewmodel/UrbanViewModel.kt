@@ -34,9 +34,9 @@ class UrbanViewModel(
 
     private var loaded = false
 
-    val wordsAdapter = WordsAdapter()
+    var wordsAdapter = WordsAdapter()
 
-    private fun getDefinitions(term: String) {
+    fun getDefinitions(term: String) {
         displayLoading()
         disposable.add(
             urbanRepository
