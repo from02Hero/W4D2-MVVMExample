@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.w4d2_mvvm_example.model.network.UrbanRepository
 import com.example.w4d2_mvvm_example.model.response.Word
+import com.example.w4d2_mvvm_example.resources.EspressoIdlingResource
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView
 import io.reactivex.disposables.CompositeDisposable
 import rx.Notification
@@ -39,6 +40,7 @@ class UrbanViewModel(
     private var loaded = false
 
     fun getDefinitions(term: String) {
+        EspressoIdlingResource.increment() // stops Espresso tests from going forward
         displayLoading()
         disposable.add(
             urbanRepository
@@ -51,6 +53,7 @@ class UrbanViewModel(
                         stateMutableLiveData.value = it
                         displayWords()
                     }
+                    EspressoIdlingResource.decrement() // Tells Espresso test to resume
                 }, {
                     loaded = true
                     //errors
@@ -59,6 +62,7 @@ class UrbanViewModel(
                         else -> it.localizedMessage
                     }
                     displayMessage(errorString)
+                    EspressoIdlingResource.decrement() // Tells Espresso test to resume
                 })
         )
     }
