@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.w4d2_mvvm_example.model.network.UrbanRepository
-import com.example.w4d2_mvvm_example.view.WordsAdapter
+import com.example.w4d2_mvvm_example.model.response.Word
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView
 import io.reactivex.disposables.CompositeDisposable
 import rx.Notification
@@ -22,6 +22,10 @@ class UrbanViewModel(
     val progressBarVisibilityLiveData: LiveData<Int>
         get() = progressBarVisibilityMutableLiveData
 
+    private val stateMutableLiveData = MutableLiveData<MutableList<Word>>()
+    val stateLiveData: LiveData<MutableList<Word>>
+        get() = stateMutableLiveData
+
     private val listVisibilityMutableLiveData = MutableLiveData<Int>()
     val listVisibilityLiveData: LiveData<Int>
         get() = listVisibilityMutableLiveData
@@ -34,8 +38,6 @@ class UrbanViewModel(
 
     private var loaded = false
 
-    var wordsAdapter = WordsAdapter()
-
     fun getDefinitions(term: String) {
         displayLoading()
         disposable.add(
@@ -46,7 +48,7 @@ class UrbanViewModel(
                     if (it.isEmpty()) {
                         displayMessage("No Definitions Retrieved")
                     } else {
-                        wordsAdapter.update(it)
+                        stateMutableLiveData.value = it
                         displayWords()
                     }
                 }, {
@@ -66,20 +68,20 @@ class UrbanViewModel(
         errorVisibilityMutableLiveData.value = View.GONE
     }
 
-    private fun displayWords() {
+    fun displayWords() {
         // set correct visible element
         listVisibilityMutableLiveData.value = View.VISIBLE
         initialState()
     }
 
-    private fun displayLoading() {
+    fun displayLoading() {
         // set correct visible element
         progressBarVisibilityMutableLiveData.value = View.VISIBLE
         listVisibilityMutableLiveData.value = View.GONE
         errorVisibilityMutableLiveData.value = View.GONE
     }
 
-    private fun displayMessage(message: String) {
+    fun displayMessage(message: String) {
         // set correct visible element
         progressBarVisibilityMutableLiveData.value = View.GONE
         listVisibilityMutableLiveData.value = View.GONE

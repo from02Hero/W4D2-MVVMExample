@@ -47,7 +47,6 @@
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            app:adapter="@{viewModel.wordsAdapter}"
             app:inmutableVisibility="@{viewModel.listVisibilityLiveData}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/word_search"

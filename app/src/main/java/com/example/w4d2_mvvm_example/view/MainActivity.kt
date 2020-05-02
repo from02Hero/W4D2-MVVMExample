@@ -3,6 +3,7 @@ package com.example.w4d2_mvvm_example.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.w4d2_mvvm_example.R
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModel: UrbanViewModel
     val injection = Injection()
     private var binding: ActivityMainBinding? = null
+    var wordsAdapter: WordsAdapter = WordsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +34,18 @@ class MainActivity : AppCompatActivity() {
             it.viewModel = viewModel
         }
         viewModel.initialState()
+
+        viewModel.stateLiveData.observe(this, Observer { list ->
+            wordsAdapter.update(list)
+        })
+
         setRecyclerViewLinearLayout()
         wordSearch()
     }
 
     private fun setRecyclerViewLinearLayout() {
         rvNews.layoutManager = LinearLayoutManager(this)
+        rvNews.adapter = wordsAdapter
     }
 
     private fun wordSearch() {
