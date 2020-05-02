@@ -1,4 +1,4 @@
-package com.example.w4d2_mvvm_example.inject
+package com.example.urbandictionary.injection
 
 import android.content.Context
 import com.example.w4d2_mvvm_example.db.AppDatabase

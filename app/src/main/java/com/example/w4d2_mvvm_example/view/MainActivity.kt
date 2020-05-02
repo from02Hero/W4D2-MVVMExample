@@ -6,9 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.urbandictionary.injection.Injection
 import com.example.w4d2_mvvm_example.R
 import com.example.w4d2_mvvm_example.databinding.ActivityMainBinding
-import com.example.w4d2_mvvm_example.inject.Injection
 import com.example.w4d2_mvvm_example.viewmodel.UrbanViewModel
 import com.example.w4d2_mvvm_example.viewmodel.UrbanViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
